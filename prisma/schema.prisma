@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model referencia {
+  id         Int     @id @default(autoincrement())
+  referencia String?
+  valor      String?
+
+  @@map("_referencia")
+}
+
+model cnae {
+  id        Int     @id @default(autoincrement())
+  codigo    String?
+  descricao String?
+
+  @@index([codigo], map: "idx_cnae")
+}
+
+model empresas {
+  id                          Int     @id @default(autoincrement())
+  cnpj_basico                 String?
+  razao_social                String?
+  natureza_juridica           String?
+  qualificacao_responsavel    String?
+  porte_empresa               String?
+  ente_federativo_responsavel String?
+  capital_social              Float?
+}
+
+model estabelecimento {
+  id                        Int     @id @default(autoincrement())
+  cnpj_basico               String?
+  matriz_filial             String?
+  nome_fantasia             String?
+  situacao_cadastral        String?
+  data_situacao_cadastral   String?
+  motivo_situacao_cadastral String?
+  nome_cidade_exterior      String?
+  pais                      String?
+  data_inicio_atividades    String?
+  cnae_fiscal               String?
+  cnae_fiscal_secundaria    String?
+  tipo_logradouro           String?
+  logradouro                String?
+  numero                    String?
+  complemento               String?
+  bairro                    String?
+  cep                       String?
+  uf                        String?
+  municipio                 String?
+  ddd1                      String?
+  telefone1                 String?
+  ddd2                      String?
+  telefone2                 String?
+  ddd_fax                   String?
+  fax                       String?
+  correio_eletronico        String?
+  situacao_especial         String?
+  data_situacao_especial    String?
+  cnpj                      String?
+}
+
+model motivo {
+  id        Int     @id @default(autoincrement())
+  codigo    String?
+  descricao String?
+}
+
+model municipio {
+  id        Int     @id @default(autoincrement())
+  codigo    String?
+  descricao String?
+}
+
+model natureza_juridica {
+  id        Int     @id @default(autoincrement())
+  codigo    String?
+  descricao String?
+}
+
+model pais {
+  id        Int     @id @default(autoincrement())
+  codigo    String?
+  descricao String?
+}
+
+model qualificacao_socio {
+  id        Int     @id @default(autoincrement())
+  codigo    String?
+  descricao String?
+}
+
+model simples {
+  id                    Int     @id @default(autoincrement())
+  cnpj_basico           String?
+  opcao_simples         String?
+  data_opcao_simples    String?
+  data_exclusao_simples String?
+  opcao_mei             String?
+  data_opcao_mei        String?
+  data_exclusao_mei     String?
+}
+
+model socios {
+  id                               Int     @id @default(autoincrement())
+  cnpj                             String?
+  cnpj_basico                      String?
+  identificador_de_socio           String?
+  nome_socio                       String?
+  cnpj_cpf_socio                   String?
+  qualificacao_socio               String?
+  data_entrada_sociedade           String?
+  pais                             String?
+  representante_legal              String?
+  nome_representante               String?
+  qualificacao_representante_legal String?
+  faixa_etaria                     String?
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  cnpj      String   @unique
+  address   String?
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
