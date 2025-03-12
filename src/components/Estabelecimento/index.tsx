@@ -1,6 +1,7 @@
 'use client'
 import { formatarData } from "@/functions/formataDataPtBr";
 import useEstabelecimentos from "@/hooks/useEstabelecimentos";
+import { estabelecimento } from "@prisma/client";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,17 +11,19 @@ export default function Estabelecimentos() {
 const params = Object.fromEntries(searchParams.entries())
     const [itemName, setItemName] = useState("")
     const [itemValue, setItemValue] = useState("")    
-    const { estabelecimentos, buscaEstabelecimento, busca } = useEstabelecimentos()
+    const [estabelecimentoList, setEstabelecimentoList] = useState<estabelecimento[]>([])    
+  
     
     useEffect(()=>{
-    if(itemName && itemValue){222
+    if(itemName && itemValue){
         setItemName(Object.keys(params)[0] || "")
         setItemValue(params[itemName] || "")
-        buscaEstabelecimento({tipo: itemName, busca: itemValue})
+          const { estabelecimentos } = useEstabelecimentos('municipio', '777')
+          estabelecimentos && setEstabelecimentoList(estabelecimentos)
     }
-},[])
+},[ params, itemName, itemValue])
 
-console.log(busca)
+
 
 
     return (
@@ -29,7 +32,7 @@ console.log(busca)
             animate={{ opacity: 1, y: 0 }}
             className="p-6 max-w-full overflow-x-auto rounded-5xl"
         >
-            <span className="text-2xl font-semibold text-gray-800">Estabelecimentos {itemName} {itemValue}</span>
+          
             <motion.div 
                 className="bg-white rounded-xl shadow-lg "
                 whileHover={{ scale: 1.01 }}
@@ -47,7 +50,7 @@ console.log(busca)
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 p-4">
-                        {estabelecimentos?.map((estabelecimento, index) => (
+                        {estabelecimentoList?.map((estabelecimento, index) => (
                             <motion.tr 
                                 key={estabelecimento.id}
                                 initial={{ opacity: 0, x: -20 }}

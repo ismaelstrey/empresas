@@ -1,44 +1,25 @@
 'use client'
 import { estabelecimento } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 
-const useEstabelecimentos = () => {
-    const [busca, setBusca] = useState<estabelecimento[]>([]);
-    const queryClient = useQueryClient();
+const getEstabelecimentos = async ( busca?: string, tipo?: string ): Promise<estabelecimento[] | []> => {
+    const buscaUrl = busca && tipo ? `/api/estabelecimentos/busca?${tipo}=${busca}` : '/api/estabelecimentos';
+    const response = await fetch(buscaUrl);
+    if (!response.ok) throw new Error('Erro ao carregar estabelecimentos');
+    return response.json();
+};
+const useEstabelecimentos = (busca?: string, tipo?: string ) => {
 
-    const getEstabelecimentos = async ({ busca, tipo }: { busca?: string, tipo?: string }): Promise<estabelecimento[] | []> => {
-const buscaUrl = busca && tipo ? `/api/estabelecimentos/busca?${tipo}=${busca}` : '/api/estabelecimentos';
-
-        const response = await fetch(buscaUrl);
-        if (!response.ok) throw new Error('Erro ao carregar estabelecimentos');
-        return response.json();
-    };
-
-    const { mutate: buscaEstabelecimento } = useMutation<estabelecimento, Error, { busca: string, tipo: string }>(
-
-        {
-            mutationFn: getEstabelecimentos,
-            onSuccess: () => {
-                console.log('Servidor FTP atualizado com sucesso!');
-                queryClient.refetchQueries();
-                queryClient.invalidateQueries({ queryKey: ['estabelecimentos'] });
-                
-            },
-            onError: (error: Error) => {
-                console.error('Erro ao buscar item:', error);
-            },
-        }
-    );
-
+console.log(busca, tipo)
+const estabelecimentosAll = () => getEstabelecimentos(busca, tipo)
 
     const { data: estabelecimentos, error: estabelecimentosError } = useQuery({
         queryKey: ['estabelecimentos'],
-        queryFn: getEstabelecimentos,
+        queryFn: estabelecimentosAll,
 
     });
     if (estabelecimentosError) console.error(estabelecimentosError);
-    return { estabelecimentos, estabelecimentosError, buscaEstabelecimento, busca };
+    return { estabelecimentos, estabelecimentosError };
 };
 
 export default useEstabelecimentos;
