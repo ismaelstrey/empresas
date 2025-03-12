@@ -1,15 +1,35 @@
-
+'use client'
 import { formatarData } from "@/functions/formataDataPtBr";
-import { estabelecimento } from "@prisma/client";
+import useEstabelecimentos from "@/hooks/useEstabelecimentos";
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default function Estabelecimentos({ estabelecimentos }: { estabelecimentos?: estabelecimento[] }) {
+export default function Estabelecimentos() { 
+    const searchParams = useSearchParams();
+const params = Object.fromEntries(searchParams.entries())
+    const [itemName, setItemName] = useState("")
+    const [itemValue, setItemValue] = useState("")    
+    const { estabelecimentos, buscaEstabelecimento, busca } = useEstabelecimentos()
+    
+    useEffect(()=>{
+    if(itemName && itemValue){222
+        setItemName(Object.keys(params)[0] || "")
+        setItemValue(params[itemName] || "")
+        buscaEstabelecimento({tipo: itemName, busca: itemValue})
+    }
+},[])
+
+console.log(busca)
+
+
     return (
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="p-6 max-w-full overflow-x-auto rounded-5xl"
         >
+            <span className="text-2xl font-semibold text-gray-800">Estabelecimentos {itemName} {itemValue}</span>
             <motion.div 
                 className="bg-white rounded-xl shadow-lg "
                 whileHover={{ scale: 1.01 }}
@@ -46,6 +66,7 @@ export default function Estabelecimentos({ estabelecimentos }: { estabelecimento
                                 </td>
                             </motion.tr>
                         ))}
+            
                     </tbody>
                 </table>
             </motion.div>

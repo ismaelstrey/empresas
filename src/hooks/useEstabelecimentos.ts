@@ -6,28 +6,23 @@ import { useState } from "react";
 const useEstabelecimentos = () => {
     const [busca, setBusca] = useState<estabelecimento[]>([]);
     const queryClient = useQueryClient();
-    const getEstabelecimentos = async (): Promise<estabelecimento[] | []> => {
-        const response = await fetch('/api/estabelecimentos');
+
+    const getEstabelecimentos = async ({ busca, tipo }: { busca?: string, tipo?: string }): Promise<estabelecimento[] | []> => {
+const buscaUrl = busca && tipo ? `/api/estabelecimentos/busca?${tipo}=${busca}` : '/api/estabelecimentos';
+
+        const response = await fetch(buscaUrl);
         if (!response.ok) throw new Error('Erro ao carregar estabelecimentos');
         return response.json();
     };
-    const buscaEstabelecimentos = async ({ busca, tipo }: { busca: string, tipo: string }) => {
-        const buscaUrl = `/api/estabelecimentos/busca?${tipo}=${busca}`
-        const response = async () => {
-            const dat = await fetch(buscaUrl)
-            setBusca(await dat.json())
-            return dat.json()
-        };
-        return response();
-    };
+
     const { mutate: buscaEstabelecimento } = useMutation<estabelecimento, Error, { busca: string, tipo: string }>(
 
         {
-            mutationFn: buscaEstabelecimentos,
+            mutationFn: getEstabelecimentos,
             onSuccess: () => {
                 console.log('Servidor FTP atualizado com sucesso!');
                 queryClient.refetchQueries();
-                queryClient.invalidateQueries({ queryKey: ['buscaEstabelecimentos'] });
+                queryClient.invalidateQueries({ queryKey: ['estabelecimentos'] });
                 
             },
             onError: (error: Error) => {
