@@ -27,7 +27,8 @@ const useEstabelecimentos = () => {
             onSuccess: () => {
                 console.log('Servidor FTP atualizado com sucesso!');
                 queryClient.refetchQueries();
-                queryClient.invalidateQueries({ queryKey: ['estabelecimentos'] });
+                queryClient.invalidateQueries({ queryKey: ['buscaEstabelecimentos'] });
+                
             },
             onError: (error: Error) => {
                 console.error('Erro ao buscar item:', error);

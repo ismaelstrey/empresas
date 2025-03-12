@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
-    const municipio = searchParams.get("municipio") || undefined;
+    const municipio = searchParams.get("municipio")?.toString() || undefined;
     const bairro = searchParams.get("bairro")?.toUpperCase() || undefined;
     const nome = searchParams.get("nome")?.toUpperCase() || undefined;
     const situacao_cadastral = searchParams.get("situacao_cadastral") || undefined;
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     if (bairro) filtros.bairro = bairro;
     if (nome) filtros.nome = { contains: nome, mode: "insensitive" };
 
-
+console.log(filtros)
 
     try {
         const estabelecimentos = await prisma.estabelecimento.findMany(

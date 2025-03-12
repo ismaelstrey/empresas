@@ -1,6 +1,7 @@
 export function formatarData(data: string): string {
     if (data.length !== 8 || isNaN(Number(data))) {
-        throw new Error("Formato inválido. Use uma string no formato YYYYMMDD.");
+       
+        return 'Não Informado'
     }
 
     const ano = data.substring(0, 4);

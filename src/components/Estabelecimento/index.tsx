@@ -1,38 +1,54 @@
 
 import { formatarData } from "@/functions/formataDataPtBr";
 import { estabelecimento } from "@prisma/client";
-
+import { motion } from "framer-motion";
 
 export default function Estabelecimentos({ estabelecimentos }: { estabelecimentos?: estabelecimento[] }) {
-
-
     return (
-        <div className="flex flex-col w-full m-4">
-
-            <table className="table-auto">
-                <thead>
-                    <tr>
-                        <th>Nome Fantasia</th>
-                        <th>CNPJ</th>
-                        <th>Municipio</th>
-                        <th>Bairro</th>
-                        <th>Data Situação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {estabelecimentos?.map((estabelecimento) => (
-                        <tr key={estabelecimento.id}>
-                            <td>{estabelecimento.nome_fantasia}</td>
-                            <td>{estabelecimento.cnpj}</td>
-                            <td>{estabelecimento.municipio}</td>
-                            <td>{estabelecimento.bairro}</td>
-                            <td>{estabelecimento.data_situacao_cadastral && formatarData(estabelecimento.data_situacao_cadastral)}</td>
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-6 max-w-full overflow-x-auto rounded-5xl"
+        >
+            <motion.div 
+                className="bg-white rounded-xl shadow-lg "
+                whileHover={{ scale: 1.01 }}
+                transition={{ duration: 0.3 }}
+            >
+                <table className="min-w-full divide-y divide-gray-200  rounded-2xl">
+                    <thead className="bg-gradient-to-r from-blue-600 to-purple-600 rounded">
+                        <tr>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Nome Fantasia</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CEP</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CNPJ</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Municipio</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Bairro</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Data Situação</th>
                         </tr>
-                    ))
-
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200 p-4">
+                        {estabelecimentos?.map((estabelecimento, index) => (
+                            <motion.tr 
+                                key={estabelecimento.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                whileHover={{ backgroundColor: "#f3f4f6" }}
+                                className="hover:bg-gray-50 transition-colors"
+                            >
+                                <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.nome_fantasia}</td>
+                                <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.cnpj}</td>
+                                <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.cep}</td>
+                                <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.municipio}</td>
+                                <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.bairro}</td>
+                                <td className="px-6 py-4 text-sm text-gray-800">
+                                    {estabelecimento.data_situacao_cadastral && formatarData(estabelecimento.data_situacao_cadastral)}
+                                </td>
+                            </motion.tr>
+                        ))}
+                    </tbody>
+                </table>
+            </motion.div>
+        </motion.div>
     );
 }

@@ -3,7 +3,7 @@ import Estabelecimentos from '@/components/Estabelecimento';
 import BuscaEstabelecimento from '@/components/Estabelecimento/BuscaEstabelecimento';
 import useEstabelecimentos from '@/hooks/useEstabelecimentos';
 import { useSearchParams } from 'next/navigation';
-import React, { use, useEffect } from 'react'
+import React, {  useEffect } from 'react'
 
 export default function BuscaEstabelecimentoPage() {
     const searchParams = useSearchParams();
@@ -23,10 +23,17 @@ export default function BuscaEstabelecimentoPage() {
 
     // const chaves = Object.keys(filtros);
     const { busca, buscaEstabelecimento } = useEstabelecimentos()
+
+
     useEffect(() => {
-        cep && buscaEstabelecimento({ busca: filtros.cep, tipo: 'cep' })
-        bairro && buscaEstabelecimento({ busca: filtros.bairro, tipo: 'bairro' })
-        municipio && buscaEstabelecimento({ busca: filtros.municipio, tipo: 'municipio' })
+ async () => {
+    nome && await buscaEstabelecimento({ busca: filtros.nome, tipo: 'nome' }),
+    situacao_cadastral && await buscaEstabelecimento({ busca: filtros.situacao_cadastral, tipo: 'situacao_cadastral' }),
+    cep && await  buscaEstabelecimento({ busca: filtros.cep, tipo: 'cep' }),
+    bairro && await  buscaEstabelecimento({ busca: filtros.bairro, tipo: 'bairro' }),
+    municipio && await  buscaEstabelecimento({ busca: filtros.municipio, tipo:'municipio' })
+        }
+    
 
     }, [])
 
@@ -35,9 +42,12 @@ export default function BuscaEstabelecimentoPage() {
 
     return (
         <div className='flex flex-col'>
-            <BuscaEstabelecimento buscaEstabelecimentos={buscaEstabelecimento} />
-            <Estabelecimentos estabelecimentos={busca} /> // BuscaEstabelecimentos
+            <BuscaEstabelecimento/>
+            <Estabelecimentos estabelecimentos={busca} />
+           
         </div>
 
     )
 }
+
+
