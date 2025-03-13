@@ -1,31 +1,11 @@
 'use client'
 import { formatarData } from "@/functions/formataDataPtBr";
 import useEstabelecimentos from "@/hooks/useEstabelecimentos";
-import { estabelecimento } from "@prisma/client";
 import { motion } from "framer-motion";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-
-export default function Estabelecimentos() { 
-    const searchParams = useSearchParams();
-const params = Object.fromEntries(searchParams.entries())
-    const [itemName, setItemName] = useState("")
-    const [itemValue, setItemValue] = useState("")    
-    const [estabelecimentoList, setEstabelecimentoList] = useState<estabelecimento[]>([])    
-  
-    
-    useEffect(()=>{
-    if(itemName && itemValue){
-        setItemName(Object.keys(params)[0] || "")
-        setItemValue(params[itemName] || "")
-          const { estabelecimentos } = useEstabelecimentos('municipio', '777')
-          estabelecimentos && setEstabelecimentoList(estabelecimentos)
-    }
-},[ params, itemName, itemValue])
 
 
-
-
+export default function Estabelecimentos() {     
+    const { estabelecimentos} = useEstabelecimentos()  
     return (
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -42,15 +22,16 @@ const params = Object.fromEntries(searchParams.entries())
                     <thead className="bg-gradient-to-r from-blue-600 to-purple-600 rounded">
                         <tr>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-white">Nome Fantasia</th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CEP</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CNAE</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-white">CNPJ</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CEP</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-white">Municipio</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-white">Bairro</th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-white">Data Situação</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 p-4">
-                        {estabelecimentoList?.map((estabelecimento, index) => (
+                        {estabelecimentos?.map((estabelecimento, index) => (
                             <motion.tr 
                                 key={estabelecimento.id}
                                 initial={{ opacity: 0, x: -20 }}
@@ -60,6 +41,7 @@ const params = Object.fromEntries(searchParams.entries())
                                 className="hover:bg-gray-50 transition-colors"
                             >
                                 <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.nome_fantasia}</td>
+                                <td title={`${estabelecimento.cnae_fiscal_secundaria}`} className="px-6 py-4 text-sm text-gray-800">{estabelecimento.cnae_fiscal}</td>
                                 <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.cnpj}</td>
                                 <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.cep}</td>
                                 <td className="px-6 py-4 text-sm text-gray-800">{estabelecimento.municipio}</td>

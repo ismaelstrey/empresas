@@ -1,23 +1,26 @@
 'use client'
 import { estabelecimento } from "@prisma/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 
-const getEstabelecimentos = async ( busca?: string, tipo?: string ): Promise<estabelecimento[] | []> => {
-    const buscaUrl = busca && tipo ? `/api/estabelecimentos/busca?${tipo}=${busca}` : '/api/estabelecimentos';
-    const response = await fetch(buscaUrl);
-    if (!response.ok) throw new Error('Erro ao carregar estabelecimentos');
-    return response.json();
-};
-const useEstabelecimentos = (busca?: string, tipo?: string ) => {
+const useEstabelecimentos = () => {
+    const searchParams = useSearchParams();
+    const params = Object.fromEntries(searchParams.entries());
+    const tipo = Object.keys(params)[0] || "";
+    const busca = params[tipo] || "";
 
-console.log(busca, tipo)
-const estabelecimentosAll = () => getEstabelecimentos(busca, tipo)
+    const getEstabelecimentos = async (): Promise<estabelecimento[] | []> => {
+        const buscaUrl = `/api/estabelecimentos/busca?${tipo}=${busca}`;
+        const response = await fetch(buscaUrl);
+        if (!response.ok) throw new Error('Erro ao carregar estabelecimentos');
+        return response.json();
+    };
 
     const { data: estabelecimentos, error: estabelecimentosError } = useQuery({
-        queryKey: ['estabelecimentos'],
-        queryFn: estabelecimentosAll,
-
+        queryKey: ['estabelecimentos', busca, tipo],
+        queryFn: getEstabelecimentos,
     });
+
     if (estabelecimentosError) console.error(estabelecimentosError);
     return { estabelecimentos, estabelecimentosError };
 };
