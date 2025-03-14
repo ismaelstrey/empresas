@@ -2,6 +2,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { BuscaAvancada } from './_input'
+import MultiCheckBox from './selectInput'
 export default function FormInput() {   
     const [tipo, setTipo] = React.useState('')
     return (
@@ -10,14 +11,12 @@ export default function FormInput() {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-wrap gap-4 p-4 bg-white rounded-lg shadow-lg"
         >          
-        {
-            tipo.length > 2 &&     <BuscaAvancada name={tipo}/>
-        }
+   
             <motion.div
                 whileTap={{ scale: 0.99 }}
                 className="w-full"
             >
-                <select 
+                {/* <select 
                     id="tipo"
                     className="w-full px-4 py-3 text-gray-700 bg-gray-50 border-2 border-gray-200 rounded-lg
                              appearance-none cursor-pointer
@@ -28,8 +27,13 @@ export default function FormInput() {
                     <option value='' >SELECIONE O TIPO</option>
                     <option value='cep'>CEP</option>
                     <option value='municipio'>MUNICÍPIO</option>
-                </select>
+                </select> */}
             </motion.div>
+
+            <MultiCheckBox/>
+            {
+            tipo.length > 2 &&     <BuscaAvancada name={tipo}/>
+        }
         </motion.div>
     )
 }

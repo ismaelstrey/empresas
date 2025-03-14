@@ -3,6 +3,7 @@ import axios from 'axios'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import MultiCheckBox from './selectInput'
 
 
 export const BuscaAvancada = ({name}:{name:string}) =>     
@@ -43,6 +44,7 @@ const buscaMunicipio = async () =>{
                      transition-all duration-300 ease-in-out" 
             autoComplete='off' 
         />
+    
         </motion.div>
         {
             municipios &&
@@ -55,11 +57,13 @@ const buscaMunicipio = async () =>{
             
         {    municipios.map((municipio) => {
                 return (                 
+                        <Link href={`/estabelecimentos?municipio=${municipio.codigo}`} onClick={()=>setMunicipios([])}>
                        <li className='hover:bg-blue-500 px-4 hover:text-white hover:scale-110 hover: cursor-pointer hover:rounded-2xl' key={municipio.id}>
-                        <Link href={`/estabelecimentos?municipio=${municipio.codigo}`}>
-                            {municipio.descricao}
+
+                            {municipio.descricao}    </li>   
+
                         </Link>
-                       </li>                  
+                                  
                 )
                 })}
                 </ul>
