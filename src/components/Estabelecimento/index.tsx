@@ -2,17 +2,15 @@
 import { formatarData } from "@/functions/formataDataPtBr";
 import useEstabelecimentos from "@/hooks/useEstabelecimentos";
 import { motion } from "framer-motion";
-
-
+import ShowImput from "./inputs/ShowInput";
 export default function Estabelecimentos() {     
-    const { estabelecimentos} = useEstabelecimentos()  
+    const { estabelecimentos} = useEstabelecimentos() 
     return (
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="p-6 max-w-full overflow-x-auto rounded-5xl"
-        >
-          
+        >          
             <motion.div 
                 className="bg-white rounded-xl shadow-lg "
                 whileHover={{ scale: 1.01 }}
@@ -20,14 +18,15 @@ export default function Estabelecimentos() {
             >
                 <table className="min-w-full divide-y divide-gray-200  rounded-2xl">
                     <thead className="bg-gradient-to-r from-blue-600 to-purple-600 rounded">
-                        <tr>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Nome Fantasia</th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CNAE</th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CNPJ</th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">CEP</th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Municipio</th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Bairro</th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-white">Data Situação</th>
+                        <tr>                           
+                            <ShowImput title="Nome Fantasia" type="nome" />
+                            <ShowImput title="CNAE" type="cnae" />
+                            <ShowImput title="CNPJ" type="cnpj" />   
+                            <ShowImput title="CEP" type="cep" />                      
+                            <ShowImput title="Municipio" type="municipio" />
+                         
+                            <ShowImput title="Bairro" type="bairro" />                        
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-white"><span>Data Situação</span></th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200 p-4">

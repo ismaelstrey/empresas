@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (situacao_cadastral) filtros.situacao_cadastral = situacao_cadastral;
     if (municipio) filtros.municipio = municipio;
     if (cep) filtros.cep = cep;
-    if (bairro) filtros.bairro = bairro;
+    if (bairro) filtros.bairro = {contains: bairro};
     if (nome) filtros.nome = { contains: nome, mode: "insensitive" };
 
 console.log(filtros)
@@ -27,8 +27,8 @@ console.log(filtros)
                 skip: 0,
                 take: 30,
                 where: {
-                    ...filtros
-                }
+                   ...filtros
+                },
             }
 
         );

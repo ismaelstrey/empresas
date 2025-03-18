@@ -2,6 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { IoCodeWorkingOutline } from "react-icons/io5";
 
+//localhost:3000/api/cnae/busca?descricao=admin
+//localhost:3000/api/cnae/busca?descricao=admin&codigo=12345678
+
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;

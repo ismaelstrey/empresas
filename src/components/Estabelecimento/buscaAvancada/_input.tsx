@@ -11,18 +11,18 @@ export const BuscaAvancada = ({name}:{name:string}) =>
     const [busca, setBusca] = useState('')
     const [municipios, setMunicipios] = useState<municipio[] | []>([])
 
-const buscaMunicipio = async () =>{
-    const url = `/api/municipios/busca?municipio=${busca}`
+const buscaMunicipio = async (tipo:string) =>{
+    const url = `/api/municipios/busca?${tipo}=${busca}`
     axios.get(url).then((response) => {
        setMunicipios(response.data)
     }).catch((error) => {
         console.log(error)
     })
 }
-
     useEffect(()=>{
-        if(busca.length >= 3 && name === 'municipio'){
-         buscaMunicipio()      
+        console.log(name)
+        if(busca.length >= 3 && name){
+         buscaMunicipio(name)      
         }else{
             setMunicipios([])
         }
@@ -43,27 +43,21 @@ const buscaMunicipio = async () =>{
                      focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 
                      transition-all duration-300 ease-in-out" 
             autoComplete='off' 
-        />
-    
+        />    
         </motion.div>
         {
             municipios &&
-               <motion.div
-                
+               <motion.div                
                         className="flex-1"
                         whileTap={{ scale: 0.99 }}
                     >
-                        <ul>
-            
+                        <ul>            
         {    municipios.map((municipio) => {
                 return (                 
                         <Link href={`/estabelecimentos?municipio=${municipio.codigo}`} onClick={()=>setMunicipios([])}>
                        <li className='hover:bg-blue-500 px-4 hover:text-white hover:scale-110 hover: cursor-pointer hover:rounded-2xl' key={municipio.id}>
-
                             {municipio.descricao}    </li>   
-
-                        </Link>
-                                  
+                        </Link>                                  
                 )
                 })}
                 </ul>
